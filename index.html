@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>開啟 Obsidian 筆記</title>
+<style>
+  :root { --bg:#f7f7f8; --fg:#1f2328; --muted:#656d76; --accent:#7c3aed; color-scheme: light dark; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#16161a; --fg:#e6e6ea; --muted:#9a9aa5; --accent:#a78bfa; } }
+  body { margin:0; min-height:100vh; display:grid; place-items:center; background:var(--bg); color:var(--fg);
+         font:16px/1.6 system-ui, "Noto Sans TC", "Microsoft JhengHei", sans-serif; padding:0 16px; }
+  main { max-width:32rem; text-align:center; }
+  .path { color:var(--muted); word-break:break-all; font-size:14px; }
+  a.btn { display:inline-block; margin-top:12px; padding:10px 20px; border-radius:8px; background:var(--accent);
+          color:#fff; text-decoration:none; font-weight:600; }
+</style>
+</head>
+<body>
+<main>
+  <p id="msg">正在開啟 Obsidian…</p>
+  <p class="path" id="path"></p>
+  <a class="btn" id="btn" href="#">沒有自動開啟？點這裡</a>
+</main>
+<script>
+  // 用法：https://sun050207.github.io/obsidian-link/#<筆記路徑，URL 編碼，不含 .md>
+  // 路徑放在 # 後面，只留在瀏覽器裡，不會傳到伺服器。可加 ?vault=名稱 指定 vault（預設 Sun-Brain）。
+  var raw = location.hash.slice(1);
+  var file = "";
+  try { file = decodeURIComponent(raw); } catch (e) { file = raw; }
+  var vault = new URLSearchParams(location.search).get("vault") || "Sun-Brain";
+  var btn = document.getElementById("btn");
+  if (!file) {
+    document.getElementById("msg").textContent = "連結裡沒有筆記路徑。";
+    btn.hidden = true;
+  } else {
+    var uri = "obsidian://open?vault=" + encodeURIComponent(vault) + "&file=" + encodeURIComponent(file);
+    document.getElementById("path").textContent = file;
+    btn.href = uri;
+    location.href = uri;
+  }
+</script>
+</body>
+</html>
