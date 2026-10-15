@@ -38,6 +38,16 @@
     document.getElementById("path").textContent = file;
     btn.href = uri;
     location.href = uri;
+    // Obsidian 接手後分頁會失焦，這時嘗試自動關閉；瀏覽器不允許時改顯示提示。
+    var tryClose = function () {
+      setTimeout(function () {
+        window.close();
+        document.getElementById("msg").textContent = "已在 Obsidian 開啟，可以關掉這個分頁。";
+      }, 300);
+    };
+    window.addEventListener("blur", tryClose, { once: true });
+    document.addEventListener("visibilitychange", function () { if (document.hidden) tryClose(); }, { once: true });
+    setTimeout(tryClose, 2500);
   }
 </script>
 </body>
